@@ -1,5 +1,6 @@
 from modules.helpers import *
 from modules.pulselib import get_token
+from modules.pulselib import create_vpn_user
 
 def main():
     host = get_host()
@@ -7,14 +8,13 @@ def main():
     password = get_password()
     filename = get_filename()
     user_list = read_users(filename)
-    '''
     auth_token = get_token(host, username, password)
     for user in user_list:
         try:
             create_vpn_user(host, auth_token, user)
-        except:
-            print("oops")
-    '''
+        except Exception as e:
+            print("Exception")
+            print(e)
     return
 
 if __name__ == '__main__':
