@@ -3,9 +3,9 @@ import json
 import re
 
 def get_token(host, username, password, verbosity=1):
-    base = "https://"
-    uri = "/api/v1/auth"
-    url = base + host + uri
+    scheme = "https://"
+    path = "/api/v1/auth"
+    uri = scheme + host + path
     auth = (username, password)
     headers = {
     "Content-Type" : "application/json"
@@ -14,7 +14,7 @@ def get_token(host, username, password, verbosity=1):
     }
     data = {
     }
-    response = requests.post(url, auth=auth, headers=headers)
+    response = requests.post(uri, auth=auth, headers=headers)
     token = response.json()['api_key']
     if verbosity >= 1:
         print("Retrieving API token...")
@@ -25,10 +25,10 @@ def get_token(host, username, password, verbosity=1):
     return token
 
 def create_vpn_user(host, auth_token, user, verbosity=1):
-    base = "https://"
+    scheme = "https://"
     auth_server = "DR-Sys-Local"
-    uri = "/api/v1/configuration/authentication/auth-servers/auth-server/{}/local/users/user".format(auth_server)
-    url = base + host + uri
+    path = "/api/v1/configuration/authentication/auth-servers/auth-server/{}/local/users/user".format(auth_server)
+    uri = scheme + host + path
     auth = (auth_token, '')
     headers = {
     "Content-Type" : "application/json"
@@ -45,7 +45,7 @@ def create_vpn_user(host, auth_token, user, verbosity=1):
     "password-cleartext" : user['password-cleartext'],
     "username" : user['username']
     }
-    response = requests.post(url, auth=auth, headers=headers, data=json.dumps(data))
+    response = requests.post(uri, auth=auth, headers=headers, data=json.dumps(data))
     if verbosity >= 1:
         print("Creating user " + username)
     if verbosity >= 2:
