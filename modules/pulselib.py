@@ -24,9 +24,9 @@ def get_token(host, username, password, verbosity=1):
         print(response.text)
     return token
 
-def create_vpn_user(host, auth_token, user, verbosity=1):
+def create_vpn_user(host, auth_token, user, verbosity=3):
     scheme = "https://"
-    auth_server = "DR-Sys-Local"
+    auth_server = "System Local"
     path = "/api/v1/configuration/authentication/auth-servers/auth-server/{}/local/users/user".format(auth_server)
     uri = scheme + host + path
     auth = (auth_token, '')
@@ -47,9 +47,32 @@ def create_vpn_user(host, auth_token, user, verbosity=1):
     }
     response = requests.post(uri, auth=auth, headers=headers, data=json.dumps(data))
     if verbosity >= 1:
-        print("Creating user " + username)
+        print("Creating user " + user['username'])
     if verbosity >= 2:
         print(response.status_code)
     if verbosity >= 3:
     	print(response.text)
     return response
+
+def delete_vpn_user(host, auth_token, user, verbosity=2):
+    username = user['username']
+    scheme = "https://"
+    auth_server = "System Local"
+    path = "/api/v1/configuration/authentication/auth-servers/auth-server/{}/local/users/user/{}".format(auth_server, username)
+    uri = scheme + host + path
+    auth = (auth_token, '')
+    headers = {
+    "Content-Type" : "application/json"
+    }
+    params = {
+    }
+    data = {
+    }
+    response = requests.delete(uri, auth=auth, headers=headers)
+    if verbosity >= 1:
+        print("Deleting user " + username)
+    if verbosity >= 2:
+        print(response.status_code)
+    if verbosity >= 3:
+        print(response.text)
+    return
